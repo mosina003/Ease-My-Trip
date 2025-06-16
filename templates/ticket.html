@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Train Ticket</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f7;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .ticket {
+      background: white;
+      width: 450px;
+      border: 2px solid #333;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      position: relative;
+    }
+
+    .ticket-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px dashed #333;
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    .ticket-header h1 {
+      font-size: 1.5rem;
+      margin: 0;
+    }
+
+    .ticket-header .ticket-id {
+      font-weight: bold;
+      color: #666;
+    }
+
+    .ticket-section {
+      margin-bottom: 15px;
+    }
+
+    .ticket-section h2 {
+      font-size: 1.2rem;
+      margin-bottom: 5px;
+      border-bottom: 1px solid #ddd;
+      padding-bottom: 3px;
+      color: #222;
+    }
+
+    .ticket-details {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+    }
+
+    .ticket-details div {
+      flex: 1;
+      padding: 5px;
+    }
+
+    .ticket-footer {
+      border-top: 2px dashed #333;
+      padding-top: 10px;
+      text-align: center;
+      font-size: 0.85rem;
+      color: #555;
+    }
+
+    .qr-code-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .qr-code-container img {
+      width: 150px;
+      height: 150px;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 5px;
+      background: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="ticket">
+    <div class="ticket-header">
+      <h1>Train Ticket</h1>
+      <div class="ticket-id">Booking #{{ booking[0] }}</div>
+    </div>
+
+    <div class="ticket-section">
+      <h2>Train Info</h2>
+      <div class="ticket-details">
+        <div><strong>Train Name:</strong> {{ booking[1] }}</div>
+        <div><strong>Quantity:</strong> {{ booking[2] }}</div>
+      </div>
+      <div class="ticket-details" style="margin-top: 5px;">
+        <div><strong>Date & Time:</strong> {{ booking[3] }}</div>
+        <div><strong>Status:</strong> {{ booking[4] }}</div>
+      </div>
+    </div>
+
+    <div class="ticket-section">
+      <h2>Passenger Info</h2>
+      <p><strong>User ID:</strong> {{ session['user_id'] }}</p>
+    </div>
+
+    <div class="ticket-section qr-code-container">
+      <h2>Your QR Code</h2>
+      <img src="data:image/png;base64,{{ qr_code }}" alt="QR Code Ticket" />
+    </div>
+
+    <div class="ticket-footer">
+      Thank you for booking with us! Have a safe journey.
+    </div>
+  </div>
+</body>
+</html>
