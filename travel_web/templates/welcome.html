@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Welcome Page</title>
+    <style>
+       body {
+            font-family: Arial, sans-serif;
+            /* Background image */
+            background-image: url("{{ url_for('static', filename='images/pexels-amol-nakve-2148578663-30494785.jpg') }}");
+            background-size: cover;        /* Make sure it covers the entire screen */
+            background-position: center;   /* Center the image */
+            background-repeat: no-repeat;  /* No repeating */
+            
+            height: 100vh;                 /* Full viewport height */
+            margin: 0;                    /* Remove default margin */
+            
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;                 /* Text color to contrast with background */
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.7); /* Optional: make text readable */
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 40px;
+        }
+        .button {
+    color: white;              /* Keep the text white or any color you want */
+    text-decoration: none;     /* Remove underline */
+    font-size: 18px;
+    margin: 10px;
+    padding: 0;                /* Remove padding */
+    background-color: transparent; /* Remove background */
+    border-radius: 0;          /* No rounded corners */
+    cursor: pointer;           /* Show pointer on hover */
+    transition: color 0.3s;
+}
+
+.button:hover {
+    color: #000103;            /* Change text color on hover */
+    text-decoration: underline; /* Add underline on hover */
+}
+h1 {
+            margin-top: -20px; /* move title up slightly */
+            color: white;     /* make sure it's visible */
+        }
+
+    </style>
+</head>
+<body>
+    <h1>Welcome to Suburban Train Booking System </h1>
+
+    <a class="button" href="/user_login">Sign In/Up</a>
+    <a class="button" href="/book_train">Book Tickets</a>
+    <a class="button" href="/search_train">Search Trains</a>
+    <a class="button" href="/chat">Chat with Bot</a>
+</body>
+</html>

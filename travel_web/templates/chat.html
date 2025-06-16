@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>TrainTicketBot Fullscreen</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      overflow: hidden;
+
+      /* Background image */
+      background: url('https://images.unsplash.com/photo-1519885271383-df45d5c9543c') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    /* Optional: if you want to center the df-messenger instead of full-screen */
+    df-messenger {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Chatbot script -->
+  <script src="https://www.gstatic.com/dialogflow-console/fast/messenger/bootstrap.js?v=1"></script>
+
+  <!-- Chatbot embed -->
+  <df-messenger
+    intent="WELCOME"
+    chat-title="TrainTicketBot"
+    agent-id="a7ff9848-92f8-453c-a0b4-752771149d6e"
+    language-code="en"
+  ></df-messenger>
+
+</body>
+</html>
+
+
