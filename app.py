@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect, send_file, session, flash, jsonify
 import sqlite3   
 from datetime import datetime
+import os
+from fpdf import FPDF
+from uuid import uuid4
 
 app = Flask(__name__)
 app.secret_key="mosina"
@@ -282,6 +285,9 @@ import io
 
 
 
+
+# … your existing imports and app setup …
+
 @app.route('/generate-ticket', methods=['POST'])
 def generate_ticket():
     body   = request.get_json(force=True)
@@ -295,12 +301,12 @@ def generate_ticket():
     trip_type        = params["triptype"]
     differently_abled= params["differentlyabled"]
 
+    # Build PDF
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
     pdf.cell(0, 10, txt="🎫 Suburban Train Ticket", ln=True, align='C')
     pdf.ln(5)
-
     for label, val in [
         ("Name", name),
         ("From", source),
@@ -314,16 +320,32 @@ def generate_ticket():
     pdf.ln(5)
     pdf.cell(0, 8, txt="✅ Please show this ticket during your travel.", ln=True)
 
-    buf = io.BytesIO()
-    pdf.output(buf)
-    buf.seek(0)
+    # Ensure tickets folder exists
+    tickets_dir = os.path.join(app.root_path, "static", "tickets")
+    os.makedirs(tickets_dir, exist_ok=True)
 
-    return send_file(
-        buf,
-        as_attachment=True,
-        download_name=f"ticket_{name}.pdf",
-        mimetype="application/pdf"
-    )
+    # Save PDF to disk with a unique name
+    filename = f"{uuid4().hex}.pdf"
+    filepath = os.path.join(tickets_dir, filename)
+    pdf.output(filepath)
+
+    # Public URL for the PDF
+    public_url = f"{request.url_root}static/tickets/{filename}"
+
+    # Return Dialogflow fulfillment JSON
+    return jsonify({
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        f"Your ticket is ready! Download it here: {public_url}"
+                    ]
+                }
+            }
+        ]
+    })
+
+
 
 
 
