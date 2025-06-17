@@ -1,7 +1,6 @@
 from flask import Flask, render_template, request, redirect, session, flash, jsonify
 import openai
-import sqlite3
-import pandas as pd
+import sqlite3   
 from datetime import datetime
 
 app = Flask(__name__)
