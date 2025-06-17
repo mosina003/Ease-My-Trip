@@ -276,6 +276,55 @@ def logout():
 def chat():
     return render_template('chat.html')
 
+from flask import Flask, request, send_file
+from fpdf import FPDF
+import io
+
+app = Flask(__name__)
+
+@app.route('/generate-ticket', methods=['POST'])
+def generate_ticket():
+    body   = request.get_json(force=True)
+    params = body["queryResult"]["parameters"]
+
+    name             = params["name"]
+    source           = params["cityfrom"]
+    destination      = params["cityto"]
+    tickets          = params["quantity"]
+    travel_class     = params["trainclass"]
+    trip_type        = params["triptype"]
+    differently_abled= params["differentlyabled"]
+
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", size=12)
+    pdf.cell(0, 10, txt="🎫 Suburban Train Ticket", ln=True, align='C')
+    pdf.ln(5)
+
+    for label, val in [
+        ("Name", name),
+        ("From", source),
+        ("To", destination),
+        ("Tickets", tickets),
+        ("Class", travel_class),
+        ("Trip Type", trip_type),
+        ("Differently Abled", differently_abled),
+    ]:
+        pdf.cell(0, 8, txt=f"{label}: {val}", ln=True)
+    pdf.ln(5)
+    pdf.cell(0, 8, txt="✅ Please show this ticket during your travel.", ln=True)
+
+    buf = io.BytesIO()
+    pdf.output(buf)
+    buf.seek(0)
+
+    return send_file(
+        buf,
+        as_attachment=True,
+        download_name=f"ticket_{name}.pdf",
+        mimetype="application/pdf"
+    )
+
 
 
 if __name__ == '__main__':
