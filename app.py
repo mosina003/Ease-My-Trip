@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, redirect, session, flash, jsonify
-import openai
 import sqlite3   
 from datetime import datetime
 
