@@ -280,7 +280,7 @@ from flask import Flask, request, send_file
 from fpdf import FPDF
 import io
 
-app = Flask(__name__)
+
 
 @app.route('/generate-ticket', methods=['POST'])
 def generate_ticket():
