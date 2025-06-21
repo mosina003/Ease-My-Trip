@@ -248,7 +248,8 @@ def ticket(booking_id):
         flash('Ticket not found or access denied.', 'error')
         return redirect('/')
 
-    booking_id, train_name, quantity, timestamp = booking
+    booking_id, train_name, source, destination, quantity, timestamp = booking
+
     qr_data = f"Booking ID: {booking_id}\nTrain: {train_name}\nQuantity: {quantity}\nDate: {timestamp}"
 
     qr_img = qrcode.make(qr_data)
