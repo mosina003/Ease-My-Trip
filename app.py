@@ -307,7 +307,7 @@ def generate_ticket():
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
-    pdf.cell(0, 10, txt="🎫 Suburban Train Ticket", ln=True, align='C')
+    pdf.cell(0, 10, txt=" Suburban Train Ticket", ln=True, align='C')
     pdf.ln(5)
     for label, val in [
         ("Name", name),
@@ -320,7 +320,7 @@ def generate_ticket():
     ]:
         pdf.cell(0, 8, txt=f"{label}: {val}", ln=True)
     pdf.ln(5)
-    pdf.cell(0, 8, txt="✅ Please show this ticket during your travel.", ln=True)
+    pdf.cell(0, 8, txt="Please show this ticket during your travel.", ln=True)
 
     # Ensure tickets folder exists
     tickets_dir = os.path.join(app.root_path, "static", "tickets")
