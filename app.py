@@ -340,9 +340,19 @@ def generate_ticket():
     return jsonify({
     "fulfillmentMessages": [
         {
-            "text": {
-                "text": [
-                    f"🎫 Your ticket is ready!\nDownload it here:\n{public_url}"
+            "payload": {
+                "richContent": [
+                    [
+                        {
+                            "type": "button",
+                            "icon": {
+                                "type": "chevron_right",
+                                "color": "#FF9800"
+                            },
+                            "text": "🎫 Download Ticket",
+                            "link": public_url
+                        }
+                    ]
                 ]
             }
         }
