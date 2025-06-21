@@ -237,7 +237,7 @@ def ticket(booking_id):
     with sqlite3.connect("database.db") as conn:
         c = conn.cursor()
         c.execute("""
-            SELECT Bookings.id, Trains.name, Bookings.quantity, Bookings.timestamp
+            SELECT Bookings.id, Trains.name, Bookings.quantity, Bookings.timestamp,Trains.source, Trains.destination
             FROM Bookings
             JOIN Trains ON Bookings.train_id = Trains.id
             WHERE Bookings.id = ? AND Bookings.user_id = ?
