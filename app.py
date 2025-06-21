@@ -333,6 +333,8 @@ def generate_ticket():
 
     # Public URL for the PDF
     public_url = f"{request.url_root}static/tickets/{filename}"
+    print("PDF Filename:", filename)
+    print("PDF URL:", public_url)
 
     # Return Dialogflow fulfillment JSON
     return jsonify({
