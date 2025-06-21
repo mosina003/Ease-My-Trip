@@ -170,6 +170,7 @@ def create_dummy_trains():
     return "Dummy trains added!"
     
 from datetime import datetime
+
 @app.route('/book_train', methods=['GET', 'POST'])
 def book_train():
     user_id = session.get('user_id')
@@ -194,6 +195,8 @@ def book_train():
 
         try:
             quantity = int(quantity)
+            if quantity <= 0:
+                raise ValueError
         except ValueError:
             flash('Invalid quantity.', 'error')
             return redirect('/book_train')
@@ -228,9 +231,7 @@ def book_train():
             flash('Booking successful!', 'success')
             return redirect(f'/ticket/{booking_id}')
 
-    # This return is for GET requests only
     return render_template('book_trains.html', trains=trains)
-
 @app.route('/ticket/<int:booking_id>')
 def ticket(booking_id):
     if 'user_id' not in session:
