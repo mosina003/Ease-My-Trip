@@ -338,22 +338,16 @@ def generate_ticket():
 
     # Return Dialogflow fulfillment JSON
     return jsonify({
-    "fulfillmentMessages": [
-        {
-            "card": {
-                "title": "Your Ticket is Ready!",
-                "subtitle": "Click below to download your suburban train ticket.",
-                "buttons": [
-                    {
-                        "text": "🎟️ Download Ticket",
-                        "postback": public_url
-                    }
-                ]
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        f"Your ticket is ready! Download it here: {public_url}"
+                    ]
+                }
             }
-        }
-    ]
-})
-
+        ]
+    })
 
 
 
