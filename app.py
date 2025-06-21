@@ -6,6 +6,7 @@ from fpdf import FPDF
 from uuid import uuid4
 import qrcode
 import base64
+import io
 
 app = Flask(__name__)
 app.secret_key="mosina"
@@ -232,6 +233,7 @@ def book_train():
             return redirect(f'/ticket/{booking_id}')
 
     return render_template('book_trains.html', trains=trains)
+
 @app.route('/ticket/<int:booking_id>')
 def ticket(booking_id):
     if 'user_id' not in session:
@@ -242,7 +244,6 @@ def ticket(booking_id):
 
     with sqlite3.connect("database.db") as conn:
         c = conn.cursor()
-
         c.execute("""
             SELECT Bookings.id, Trains.name, Bookings.user_source, Bookings.user_destination, Bookings.quantity, Bookings.timestamp
             FROM Bookings
@@ -257,9 +258,9 @@ def ticket(booking_id):
 
     booking_id, train_name, source, destination, quantity, timestamp = booking
 
-    qr_data = f"Booking ID: {booking_id}\nTrain: {train_name}\nQuantity: {quantity}\nDate: {timestamp}"
-
+    qr_data = f"Booking ID: {booking_id}\nTrain: {train_name}\nFrom: {source}\nTo: {destination}\nQuantity: {quantity}\nDate: {timestamp}"
     qr_img = qrcode.make(qr_data)
+
     buffered = io.BytesIO()
     qr_img.save(buffered, format="PNG")
     qr_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
