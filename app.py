@@ -338,22 +338,17 @@ def generate_ticket():
 
     # Return Dialogflow fulfillment JSON
     return jsonify({
-    "payload": {
-        "richContent": [
-            [
-                {
-                    "type": "button",
-                    "text": "Download Ticket 🎟️",
-                    "icon": {
-                        "type": "launch",
-                        "color": "#1976D2"
-                    },
-                    "link": public_url
-                }
-            ]
-        ]
-    }
+    "fulfillmentMessages": [
+        {
+            "text": {
+                "text": [
+                    "🎫 Your ticket is ready!\nDownload it here:\n" + public_url
+                ]
+            }
+        }
+    ]
 })
+
 
 
 
