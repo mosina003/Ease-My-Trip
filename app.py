@@ -340,12 +340,19 @@ def generate_ticket():
     return jsonify({
     "fulfillmentMessages": [
         {
+            "text": {
+                "text": [
+                    "Your ticket has been generated."
+                ]
+            }
+        },
+        {
             "card": {
                 "title": "Your Ticket is Ready!",
                 "subtitle": "Click below to download your suburban train ticket.",
                 "buttons": [
                     {
-                        "text": "Download Ticket",
+                        "text": "Download Ticket 🎟️",
                         "postback": public_url
                     }
                 ]
@@ -353,6 +360,7 @@ def generate_ticket():
         }
     ]
 })
+
 
 
 
