@@ -1,1 +1,1 @@
-web: gunicorn TRAVEL_WEB:app
+gunicorn app:app
