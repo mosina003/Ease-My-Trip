@@ -11,22 +11,52 @@
             color: white;
         }
         .container {
-            background: rgba(0,0,0,0.6);
-            padding: 20px;
-            margin: 50px auto;
-            width: 50%;
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            margin: 60px auto;
+            width: 400px;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.7);
         }
-        select, input[type="number"], button {
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        label {
+            margin-top: 10px;
+            display: block;
+            font-weight: bold;
+        }
+        select, input[type="number"], input[type="text"], button {
             width: 100%;
             padding: 10px;
-            margin-top: 10px;
+            margin-top: 8px;
+            margin-bottom: 15px;
             border-radius: 5px;
             border: none;
+            font-size: 16px;
+            background-color: white;   /* ✅ This line ensures white background */
+            color: black;
         }
         button {
             background-color: #28a745;
             color: white;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #218838;
+        }
+        .flash {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .flash.success {
+            background-color: #4CAF50;
+        }
+        .flash.error {
+            background-color: #f44336;
         }
     </style>
 </head>
@@ -34,33 +64,29 @@
     <div class="container">
         <h1>Book Train</h1>
         {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
-            {% for category, message in messages %}
-              <div class="flash {{ category }}">{{ message }}</div>
-            {% endfor %}
-          {% endif %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
         {% endwith %}
+
         <form method="POST">
             <label for="train_id">Select Train:</label>
             <select name="train_id" id="train_id" required>
                 {% for train in trains %}
-                    <option value="{{ train[0] }}">
-                        {{ train[1] }} 
-                    </option>
+                    <option value="{{ train[0] }}">{{ train[1] }}</option>
                 {% endfor %}
             </select>
 
             <label for="quantity">Number of Tickets:</label>
             <input type="number" name="quantity" id="quantity" min="1" required>
 
-
             <label for="source_id">Source:</label>
-            <input type="text" name="source_id" id="source_id" required>
-
+            <input type="text" name="source_id" id="source_id" placeholder="Enter source station" required>
 
             <label for="destination_id">Destination:</label>
-            <input type="text" name="destination_id" id="destination_id" required>
-
+            <input type="text" name="destination_id" id="destination_id" placeholder="Enter destination station" required>
 
             <button type="submit">Book Now</button>
         </form>
