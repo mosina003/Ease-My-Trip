@@ -231,6 +231,40 @@ def book_train():
     # This return is for GET requests only
     return render_template('book_trains.html', trains=trains)
 
+@app.route('/ticket/<int:booking_id>')
+def ticket(booking_id):
+    if 'user_id' not in session:
+        flash('Please login to view your ticket.', 'error')
+        return redirect('/user_login')
+
+    user_id = session['user_id']
+
+    with sqlite3.connect("database.db") as conn:
+        c = conn.cursor()
+
+        c.execute("""
+            SELECT Bookings.id, Trains.name, Bookings.user_source, Bookings.user_destination, Bookings.quantity, Bookings.timestamp
+            FROM Bookings
+            JOIN Trains ON Bookings.train_id = Trains.id
+            WHERE Bookings.id = ? AND Bookings.user_id = ?
+        """, (booking_id, user_id))
+        booking = c.fetchone()
+
+    if not booking:
+        flash('Ticket not found or access denied.', 'error')
+        return redirect('/')
+
+    booking_id, train_name, source, destination, quantity, timestamp = booking
+
+    qr_data = f"Booking ID: {booking_id}\nTrain: {train_name}\nQuantity: {quantity}\nDate: {timestamp}"
+
+    qr_img = qrcode.make(qr_data)
+    buffered = io.BytesIO()
+    qr_img.save(buffered, format="PNG")
+    qr_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+
+    return render_template('ticket.html', booking=booking, qr_code=qr_base64)
+
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
