@@ -42,7 +42,9 @@ def init_db():
                 train_id INTEGER,
                 quantity INTEGER,
                 timestamp TEXT,
-                status TEXT
+                status TEXT,
+                user_source TEXT,
+                user_destination TEXT
             )
         ''')
         conn.commit()
@@ -186,6 +188,8 @@ def book_train():
     if request.method == 'POST':
         train_id = request.form.get('train_id')
         quantity = request.form.get('quantity')
+        user_source = request.form.get('source')
+        user_destination = request.form.get('destination')
 
         if not train_id or not quantity:
             flash('Please select a train and quantity before booking.', 'error')
