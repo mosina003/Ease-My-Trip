@@ -342,13 +342,12 @@ def generate_ticket():
         {
             "text": {
                 "text": [
-                    "🎫 Your ticket is ready!\nDownload it here:\n" + public_url
+                    f"🎫 Your ticket is ready!\nDownload it here:\n{public_url}"
                 ]
             }
         }
     ]
 })
-
 
 
 
