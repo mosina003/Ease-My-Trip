@@ -178,7 +178,9 @@ def book_train():
 
     with sqlite3.connect("database.db") as conn:
         c = conn.cursor()
-        c.execute("SELECT id, name, source, destination, time, fare, seats FROM Trains")
+        c.execute("INSERT INTO Bookings (user_id, train_id, quantity, timestamp, status, user_source, user_destination) VALUES (?, ?, ?, ?, ?, ?, ?)",
+        (user_id, train_id, quantity, timestamp, "Booked", request.form.get("source"), request.form.get("destination")))
+
         trains = c.fetchall()
 
     if request.method == 'POST':
@@ -236,8 +238,9 @@ def ticket(booking_id):
 
     with sqlite3.connect("database.db") as conn:
         c = conn.cursor()
+
         c.execute("""
-            SELECT Bookings.id, Trains.name, Bookings.quantity, Bookings.timestamp,Trains.source, Trains.destination
+            SELECT Bookings.id, Trains.name, Bookings.user_source, Bookings.user_destination, Bookings.quantity, Bookings.timestamp
             FROM Bookings
             JOIN Trains ON Bookings.train_id = Trains.id
             WHERE Bookings.id = ? AND Bookings.user_id = ?
