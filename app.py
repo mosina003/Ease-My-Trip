@@ -4,6 +4,8 @@ from datetime import datetime
 import os
 from fpdf import FPDF
 from uuid import uuid4
+import qrcode
+import base64
 
 app = Flask(__name__)
 app.secret_key="mosina"
@@ -77,11 +79,6 @@ def user_login():
 
     return render_template('user_login.html')
 
-
-
-@app.route('/search_trains')
-def search_trains():
-    return "<h2>Search Trains Page (Coming Soon)</h2>"
 
 @app.route('/all_trains')
 def all_trains():
@@ -224,15 +221,10 @@ def book_train():
             booking_id = c.lastrowid
             conn.commit()
 
-            flash('Booking successful!', 'success')
+            # Redirect to ticket page
             return redirect(f'/ticket/{booking_id}')
 
     return render_template('book_trains.html', trains=trains)
-
-
-import qrcode
-import io
-import base64
 
 @app.route('/ticket/<int:booking_id>')
 def ticket(booking_id):
@@ -256,19 +248,16 @@ def ticket(booking_id):
         flash('Ticket not found or access denied.', 'error')
         return redirect('/')
 
-    # Prepare data to encode in QR
     booking_id, train_name, quantity, timestamp = booking
     qr_data = f"Booking ID: {booking_id}\nTrain: {train_name}\nQuantity: {quantity}\nDate: {timestamp}"
 
-    # Generate QR code image
     qr_img = qrcode.make(qr_data)
-
-    # Convert PIL image to base64 string to embed in HTML
     buffered = io.BytesIO()
     qr_img.save(buffered, format="PNG")
     qr_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
 
     return render_template('ticket.html', booking=booking, qr_code=qr_base64)
+
 @app.route('/logout')
 def logout():
     session.pop('user_id', None)
