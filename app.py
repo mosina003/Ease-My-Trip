@@ -293,7 +293,6 @@ def generate_ticket():
     print("Webhook called")
     body = request.get_json(force=True)
     print("Received body:", body)
-    body   = request.get_json(force=True)
     params = body["queryResult"]["parameters"]
 
     name             = params["name"]
