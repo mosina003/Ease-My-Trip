@@ -170,7 +170,6 @@ def create_dummy_trains():
     return "Dummy trains added!"
     
 from datetime import datetime
-
 @app.route('/book_train', methods=['GET', 'POST'])
 def book_train():
     user_id = session.get('user_id')
@@ -180,9 +179,7 @@ def book_train():
 
     with sqlite3.connect("database.db") as conn:
         c = conn.cursor()
-        c.execute("INSERT INTO Bookings (user_id, train_id, quantity, timestamp, status, user_source, user_destination) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        (user_id, train_id, quantity, timestamp, "Booked", request.form.get("source"), request.form.get("destination")))
-
+        c.execute("SELECT id, name, source, destination, time, fare, seats FROM Trains")
         trains = c.fetchall()
 
     if request.method == 'POST':
@@ -191,8 +188,8 @@ def book_train():
         user_source = request.form.get('source')
         user_destination = request.form.get('destination')
 
-        if not train_id or not quantity:
-            flash('Please select a train and quantity before booking.', 'error')
+        if not train_id or not quantity or not user_source or not user_destination:
+            flash('Please fill in all required fields.', 'error')
             return redirect('/book_train')
 
         try:
@@ -220,51 +217,19 @@ def book_train():
             c.execute("UPDATE Trains SET seats = ? WHERE id = ?", (new_seats, train_id))
 
             timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            c.execute(
-                "INSERT INTO Bookings (user_id, train_id, quantity, timestamp, status) VALUES (?, ?, ?, ?, ?)",
-                (user_id, train_id, quantity, timestamp, "Booked")
-            )
+            c.execute("""
+                INSERT INTO Bookings (user_id, train_id, quantity, timestamp, status, user_source, user_destination)
+                VALUES (?, ?, ?, ?, ?, ?, ?)
+            """, (user_id, train_id, quantity, timestamp, "Booked", user_source, user_destination))
+
             booking_id = c.lastrowid
             conn.commit()
 
-            # Redirect to ticket page
+            flash('Booking successful!', 'success')
             return redirect(f'/ticket/{booking_id}')
 
+    # This return is for GET requests only
     return render_template('book_trains.html', trains=trains)
-
-@app.route('/ticket/<int:booking_id>')
-def ticket(booking_id):
-    if 'user_id' not in session:
-        flash('Please login to view your ticket.', 'error')
-        return redirect('/user_login')
-
-    user_id = session['user_id']
-
-    with sqlite3.connect("database.db") as conn:
-        c = conn.cursor()
-
-        c.execute("""
-            SELECT Bookings.id, Trains.name, Bookings.user_source, Bookings.user_destination, Bookings.quantity, Bookings.timestamp
-            FROM Bookings
-            JOIN Trains ON Bookings.train_id = Trains.id
-            WHERE Bookings.id = ? AND Bookings.user_id = ?
-        """, (booking_id, user_id))
-        booking = c.fetchone()
-
-    if not booking:
-        flash('Ticket not found or access denied.', 'error')
-        return redirect('/')
-
-    booking_id, train_name, source, destination, quantity, timestamp = booking
-
-    qr_data = f"Booking ID: {booking_id}\nTrain: {train_name}\nQuantity: {quantity}\nDate: {timestamp}"
-
-    qr_img = qrcode.make(qr_data)
-    buffered = io.BytesIO()
-    qr_img.save(buffered, format="PNG")
-    qr_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-
-    return render_template('ticket.html', booking=booking, qr_code=qr_base64)
 
 @app.route('/logout')
 def logout():
