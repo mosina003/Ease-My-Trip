@@ -340,13 +340,6 @@ def generate_ticket():
     return jsonify({
     "fulfillmentMessages": [
         {
-            "text": {
-                "text": [
-                    "Your ticket has been generated."
-                ]
-            }
-        },
-        {
             "card": {
                 "title": "Your Ticket is Ready!",
                 "subtitle": "Click below to download your suburban train ticket.",
@@ -360,6 +353,7 @@ def generate_ticket():
         }
     ]
 })
+
 
 if __name__ == '__main__':
     init_db()
