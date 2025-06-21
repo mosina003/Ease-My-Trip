@@ -352,7 +352,7 @@ def generate_ticket():
                 "subtitle": "Click below to download your suburban train ticket.",
                 "buttons": [
                     {
-                        "text": "Download Ticket 🎟️",
+                        "text": "Download Ticket",
                         "postback": public_url
                     }
                 ]
@@ -360,12 +360,6 @@ def generate_ticket():
         }
     ]
 })
-
-
-
-
-
-
 
 if __name__ == '__main__':
     init_db()
