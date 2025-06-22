@@ -158,75 +158,76 @@ def user_registration():
 
 @app.route('/create_dummy_trains')
 def create_dummy_trains():
-    with sqlite3.connect("database.db") as conn:
-        c = conn.cursor()
-
-        # Check if trains already exist
-        c.execute("SELECT COUNT(*) FROM Trains")
-        count = c.fetchone()[0]
-
-        if count == 0:
-            dummy_trains = [
-                ('North line', 'Chennai Beach', 'Tambaram', '05:00 AM', 10.0, 20),
-                ('West line', 'Chennai Central', 'Velachery', '05:30 AM', 12.0, 20),
-                ('South line','Chennai Beach', 'Chengalpattu', '06:00 AM', 15.0, 20),
-                ('MRTS line','Tambaram', 'Chennai Beach', '06:15 AM', 10.0, 20),
-                ('Chennai Local 005', 'Velachery', 'Chennai Central', '06:30 AM', 12.0, 20),
-    ('Chennai Local 006', 'Chengalpattu', 'Chennai Beach', '07:00 AM', 15.0, 10),
+    local_trains_chennai = [
+    ('Chennai Local 001', 'Chennai Beach', 'Tambaram', '05:00 AM', 10.0, 200),
+    ('Chennai Local 002', 'Chennai Central', 'Velachery', '05:30 AM', 12.0, 200),
+    ('Chennai Local 003', 'Chennai Beach', 'Chengalpattu', '06:00 AM', 15.0, 200),
+    ('Chennai Local 004', 'Tambaram', 'Chennai Beach', '06:15 AM', 10.0, 200),
+    ('Chennai Local 005', 'Velachery', 'Chennai Central', '06:30 AM', 12.0, 200),
+    ('Chennai Local 006', 'Chengalpattu', 'Chennai Beach', '07:00 AM', 15.0, 200),
     ('Chennai Local 007', 'Chennai Central', 'Avadi', '07:10 AM', 8.0, 200),
-    ('Chennai Local 008', 'Avadi', 'Chennai Central', '07:25 AM', 8.0, 20),
+    ('Chennai Local 008', 'Avadi', 'Chennai Central', '07:25 AM', 8.0, 200),
     ('Chennai Local 009', 'Chennai Beach', 'Tambaram', '07:45 AM', 10.0, 200),
     ('Chennai Local 010', 'Tambaram', 'Chennai Beach', '08:00 AM', 10.0, 200),
     ('Chennai Local 011', 'Velachery', 'Tambaram', '08:15 AM', 10.0, 200),
     ('Chennai Local 012', 'Tambaram', 'Velachery', '08:45 AM', 10.0, 200),
-    ('Chennai Local 013', 'Chennai Central', 'Thiruninravur', '09:00 AM', 9.0, 30),
+    ('Chennai Local 013', 'Chennai Central', 'Thiruninravur', '09:00 AM', 9.0, 200),
     ('Chennai Local 014', 'Thiruninravur', 'Chennai Central', '09:30 AM', 9.0, 200),
     ('Chennai Local 015', 'Chengalpattu', 'Tambaram', '10:00 AM', 10.0, 200),
     ('Chennai Local 016', 'Tambaram', 'Chengalpattu', '10:30 AM', 10.0, 200),
-    ('Chennai Local 017', 'Chennai Beach', 'Velachery', '11:00 AM', 12.0, 30),
+    ('Chennai Local 017', 'Chennai Beach', 'Velachery', '11:00 AM', 12.0, 200),
     ('Chennai Local 018', 'Velachery', 'Chennai Beach', '11:30 AM', 12.0, 200),
     ('Chennai Local 019', 'Chennai Central', 'Gummidipoondi', '12:00 PM', 18.0, 200),
-    ('Chennai Local 020', 'Gummidipoondi', 'Chennai Central', '12:30 PM', 18.0, 21),
+    ('Chennai Local 020', 'Gummidipoondi', 'Chennai Central', '12:30 PM', 18.0, 200),
     ('Chennai Local 021', 'Chennai Central', 'Perambur', '01:00 PM', 5.0, 200),
-    ('Chennai Local 022', 'Perambur', 'Chennai Central', '01:30 PM', 5.0, 15),
+    ('Chennai Local 022', 'Perambur', 'Chennai Central', '01:30 PM', 5.0, 200),
     ('Chennai Local 023', 'Chennai Beach', 'Tambaram', '02:00 PM', 10.0, 200),
-    ('Chennai Local 024', 'Tambaram', 'Chennai Beach', '02:30 PM', 10.0, 20),
+    ('Chennai Local 024', 'Tambaram', 'Chennai Beach', '02:30 PM', 10.0, 200),
     ('Chennai Local 025', 'Velachery', 'Avadi', '03:00 PM', 13.0, 200),
-    ('Chennai Local 026', 'Avadi', 'Velachery', '03:30 PM', 13.0, 24),
+    ('Chennai Local 026', 'Avadi', 'Velachery', '03:30 PM', 13.0, 200),
     ('Chennai Local 027', 'Chennai Central', 'Tiruvallur', '04:00 PM', 14.0, 200),
-    ('Chennai Local 028', 'Tiruvallur', 'Chennai Central', '04:30 PM', 14.0, 22),
-    ('Chennai Local 029', 'Chennai Beach', 'Chengalpattu', '05:00 PM', 15.0, 20),
-    ('Chennai Local 030', 'Chengalpattu', 'Chennai Beach', '05:30 PM', 15.0, 10),
+    ('Chennai Local 028', 'Tiruvallur', 'Chennai Central', '04:30 PM', 14.0, 200),
+    ('Chennai Local 029', 'Chennai Beach', 'Chengalpattu', '05:00 PM', 15.0, 200),
+    ('Chennai Local 030', 'Chengalpattu', 'Chennai Beach', '05:30 PM', 15.0, 200),
     ('Chennai Local 031', 'Tambaram', 'Velachery', '06:00 PM', 10.0, 200),
-    ('Chennai Local 032', 'Velachery', 'Tambaram', '06:30 PM', 10.0, 20),
-    ('Chennai Local 033', 'Chennai Central', 'Avadi', '07:00 PM', 8.0, 20),
+    ('Chennai Local 032', 'Velachery', 'Tambaram', '06:30 PM', 10.0, 200),
+    ('Chennai Local 033', 'Chennai Central', 'Avadi', '07:00 PM', 8.0, 200),
     ('Chennai Local 034', 'Avadi', 'Chennai Central', '07:30 PM', 8.0, 200),
-    ('Chennai Local 035', 'Chennai Beach', 'Tambaram', '08:00 PM', 10.0, 10),
-    ('Chennai Local 036', 'Tambaram', 'Chennai Beach', '08:30 PM', 10.0, 20),
-    ('Chennai Local 037', 'Velachery', 'Chennai Central', '09:00 PM', 12.0, 10),
-    ('Chennai Local 038', 'Chennai Central', 'Velachery', '09:30 PM', 12.0, 15),
+    ('Chennai Local 035', 'Chennai Beach', 'Tambaram', '08:00 PM', 10.0, 200),
+    ('Chennai Local 036', 'Tambaram', 'Chennai Beach', '08:30 PM', 10.0, 200),
+    ('Chennai Local 037', 'Velachery', 'Chennai Central', '09:00 PM', 12.0, 200),
+    ('Chennai Local 038', 'Chennai Central', 'Velachery', '09:30 PM', 12.0, 200),
     ('Chennai Local 039', 'Chennai Central', 'Korattur', '10:00 PM', 6.0, 200),
-    ('Chennai Local 040', 'Korattur', 'Chennai Central', '10:30 PM', 6.0, 23),
-    ('Chennai Local 041', 'Chennai Beach', 'Tambaram', '11:00 PM', 10.0, 25),
-    ('Chennai Local 042', 'Tambaram', 'Chennai Beach', '11:30 PM', 10.0, 20),
-    ('Chennai Local 043', 'Velachery', 'Guindy', '12:00 AM', 7.0, 20),
-    ('Chennai Local 044', 'Guindy', 'Velachery', '12:30 AM', 7.0, 10),
-    ('Chennai Local 045', 'Avadi', 'Tiruninravur', '01:00 AM', 6.0, 15),
-    ('Chennai Local 046', 'Tiruninravur', 'Avadi', '01:30 AM', 6.0, 20),
-    ('Chennai Local 047', 'Chengalpattu', 'Tiruvallur', '02:00 AM', 20.0, 20),
-    ('Chennai Local 048', 'Tiruvallur', 'Chengalpattu', '02:30 AM', 20.0, 15),
-    ('Chennai Local 049', 'Chennai Central', 'Thirumullaivoyal', '03:00 AM', 10.0, 20),
-    ('Chennai Local 050', 'Thirumullaivoyal', 'Chennai Central', '03:30 AM', 10.0, 10),
+    ('Chennai Local 040', 'Korattur', 'Chennai Central', '10:30 PM', 6.0, 200),
+    ('Chennai Local 041', 'Chennai Beach', 'Tambaram', '11:00 PM', 10.0, 200),
+    ('Chennai Local 042', 'Tambaram', 'Chennai Beach', '11:30 PM', 10.0, 200),
+    ('Chennai Local 043', 'Velachery', 'Guindy', '12:00 AM', 7.0, 200),
+    ('Chennai Local 044', 'Guindy', 'Velachery', '12:30 AM', 7.0, 200),
+    ('Chennai Local 045', 'Avadi', 'Tiruninravur', '01:00 AM', 6.0, 200),
+    ('Chennai Local 046', 'Tiruninravur', 'Avadi', '01:30 AM', 6.0, 200),
+    ('Chennai Local 047', 'Chengalpattu', 'Tiruvallur', '02:00 AM', 20.0, 200),
+    ('Chennai Local 048', 'Tiruvallur', 'Chengalpattu', '02:30 AM', 20.0, 200),
+    ('Chennai Local 049', 'Chennai Central', 'Thirumullaivoyal', '03:00 AM', 10.0, 200),
+    ('Chennai Local 050', 'Thirumullaivoyal', 'Chennai Central', '03:30 AM', 10.0, 200),
+]
 
-            ]
+
+    with sqlite3.connect("database.db") as conn:
+        c = conn.cursor()
+        c.execute("SELECT COUNT(*) FROM Trains")
+        count = c.fetchone()[0]
+
+        if count == 0:
             c.executemany("""
                 INSERT INTO Trains (name, source, destination, time, fare, seats)
                 VALUES (?, ?, ?, ?, ?, ?)
-            """, dummy_trains)
+            """, local_trains_chennai)
             conn.commit()
             return "Dummy trains added!"
         else:
             return "Trains already exist!"
+
+            
 @app.route('/reset_trains')
 def reset_trains():
     with sqlite3.connect("database.db") as conn:
