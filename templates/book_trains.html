@@ -74,19 +74,23 @@
         <form method="POST">
             <label for="train_id">Select Train:</label>
             <select name="train_id" id="train_id" required>
-                {% for train in trains %}
+                {% if trains %}
+                  {% for train in trains %}
                     <option value="{{ train[0] }}">{{ train[1] }}</option>
-                {% endfor %}
+                  {% endfor %}
+                {% else %}
+                  <option disabled>No trains available</option>
+                {% endif %}
             </select>
 
             <label for="quantity">Number of Tickets:</label>
             <input type="number" name="quantity" id="quantity" min="1" required>
 
-            <label for="source_id">Source:</label>
-            <input type="text" name="source_id" id="source_id" placeholder="Enter source station" required>
+            <label for="source">Source:</label>
+            <input type="text" name="source" id="source" placeholder="Enter source station" required>
 
-            <label for="destination_id">Destination:</label>
-            <input type="text" name="destination_id" id="destination_id" placeholder="Enter destination station" required>
+            <label for="destination">Destination:</label>
+            <input type="text" name="destination" id="destination" placeholder="Enter destination station" required>
 
             <button type="submit">Book Now</button>
         </form>
