@@ -342,6 +342,11 @@ def logout():
 
 @app.route('/chat')
 def chat():
+    user_id = session.get('user_id')
+    if user_id is None:
+        flash('Please log in to use the chatbot.', 'error')
+        return redirect('/user_login')
+
     return render_template('chat.html')
 
 from flask import Flask, request, send_file
