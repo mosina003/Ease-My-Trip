@@ -160,15 +160,34 @@ def user_registration():
 def create_dummy_trains():
     with sqlite3.connect("database.db") as conn:
         c = conn.cursor()
-        dummy_trains = [
-            ('Express 101', 'New York', 'Chicago', '08:00 AM', 150.00, 100),
-            ('Fastline 202', 'Los Angeles', 'San Francisco', '09:30 AM', 120.00, 80),
-            ('Night Rider 303', 'Boston', 'Washington', '10:15 PM', 200.00, 60),
-            ('Superfast 404', 'Miami', 'Orlando', '07:00 AM', 90.00, 50)
-        ]
-        c.executemany("INSERT INTO Trains (name, source, destination, time, fare, seats) VALUES (?, ?, ?, ?, ?, ?)", dummy_trains)
+
+        # Check if trains already exist
+        c.execute("SELECT COUNT(*) FROM Trains")
+        count = c.fetchone()[0]
+
+        if count == 0:
+            dummy_trains = [
+                ('Express 101', 'New York', 'Chicago', '08:00 AM', 150.00, 100),
+                ('Fastline 202', 'Los Angeles', 'San Francisco', '09:30 AM', 120.00, 80),
+                ('Night Rider 303', 'Boston', 'Washington', '10:15 PM', 200.00, 60),
+                ('Superfast 404', 'Miami', 'Orlando', '07:00 AM', 90.00, 50)
+            ]
+            c.executemany("""
+                INSERT INTO Trains (name, source, destination, time, fare, seats)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, dummy_trains)
+            conn.commit()
+            return "Dummy trains added!"
+        else:
+            return "Trains already exist!"
+@app.route('/reset_trains')
+def reset_trains():
+    with sqlite3.connect("database.db") as conn:
+        c = conn.cursor()
+        c.execute("DELETE FROM Trains")
         conn.commit()
-    return "Dummy trains added!"
+    return redirect('/create_dummy_trains')
+
     
 from datetime import datetime
 
