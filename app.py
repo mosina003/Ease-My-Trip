@@ -89,7 +89,9 @@ def all_trains():
         c = conn.cursor()
         c.execute("SELECT id, name, source, destination, time, fare, seats FROM Trains")
         trains = c.fetchall()
+        print("🚂 Trains fetched from DB:", trains)  # 👈 Add this debug line
     return render_template('all_trains.html', trains=trains)
+
 
 @app.route('/search_train', methods=['GET', 'POST'])
 def search_train():
